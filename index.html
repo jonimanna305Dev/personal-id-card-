@@ -38,6 +38,7 @@
       <div class="card shadow-lg border-0" style="border-radius:20px;">
         <div class="card-body p-4">
           <div class="row align-items-center">
+
             <div class="col-4 text-center">
               <img id="cardImg" src="https://via.placeholder.com/150"
                    class="img-fluid rounded border border-3 border-primary"
@@ -50,9 +51,8 @@
               <p class="small mb-1"><strong>DOB:</strong> <span id="outDob">--/--/----</span></p>
               <p class="small mb-1"><strong>BLOOD:</strong> <span id="outBlood" class="text-danger">O+</span></p>
               <p class="small mb-1"><strong>TEL:</strong> <span id="outPhone">0000 0000</span></p>
-              <p class="small mb-1 text-truncate">
-                <strong>EMAIL:</strong> <span id="outEmail">example@mail.com</span>
-              </p>
+              <p class="small mb-1"><strong>EMAIL:</strong> <span id="outEmail">example@mail.com</span></p>
+              <p class="small mb-0 text-truncate"><strong>ADDR:</strong> <span id="outAddress">Your Address</span></p>
             </div>
 
             <div class="col-3 text-center">
@@ -60,6 +60,7 @@
                    src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=welcome"
                    class="img-fluid rounded border p-1">
             </div>
+
           </div>
         </div>
 
@@ -152,6 +153,11 @@
             <input id="inEmail" type="email" class="form-control">
           </div>
 
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Address</label>
+            <input id="inAddress" class="form-control" placeholder="Your Address">
+          </div>
+
           <hr>
 
           <h6 class="text-primary">Social Links</h6>
@@ -194,30 +200,37 @@ function update(){
   const blood = inBlood.value;
   const phone = inPhone.value || "0000";
   const email = inEmail.value || "example@mail.com";
+  const address = inAddress.value || "Your Address";
 
   outName.innerText = name.toUpperCase();
   outDob.innerText = dob;
   outBlood.innerText = blood;
   outPhone.innerText = phone;
   outEmail.innerText = email;
+  outAddress.innerText = address;
 
-  mainQr.src =
-    `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=
-    Name:${encodeURIComponent(name)},
-    Phone:${encodeURIComponent(phone)},
-    Email:${encodeURIComponent(email)}`;
+  const qrData = `
+Name: ${name}
+DOB: ${dob}
+Blood: ${blood}
+Phone: ${phone}
+Email: ${email}
+Address: ${address}
+  `;
 
-  qrFb.src = `https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${encodeURIComponent(inFb.value)}`;
-  qrWa.src = `https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://wa.me/${encodeURIComponent(inWa.value)}`;
-  qrYt.src = `https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${encodeURIComponent(inYt.value)}`;
-  qrIg.src = `https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${encodeURIComponent(inIg.value)}`;
+  mainQr.src = "https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=" + encodeURIComponent(qrData);
+
+  qrFb.src = "https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=" + encodeURIComponent(inFb.value);
+  qrWa.src = "https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://wa.me/" + encodeURIComponent(inWa.value);
+  qrYt.src = "https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=" + encodeURIComponent(inYt.value);
+  qrIg.src = "https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=" + encodeURIComponent(inIg.value);
 }
 
 function downloadCard(){
   html2canvas(document.getElementById("cardArea"), {scale:2}).then(canvas=>{
-    const a=document.createElement("a");
-    a.download="media-id-card.png";
-    a.href=canvas.toDataURL();
+    const a = document.createElement("a");
+    a.download = "media-id-card.png";
+    a.href = canvas.toDataURL();
     a.click();
   });
 }
